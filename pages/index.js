@@ -14,17 +14,18 @@ export default function Home() {
     const resp = await axios.get(
       `https://randomuser.me/api/?results=${genAmount}`
     );
-    resp.data.results;
-    setUsers(
-      resp.data.results.map((x) => {
-        return {
-          name: x.name.first + " " + x.name.last,
-          email: x.email,
-          imgUrl: x.picture.large,
-          address: `${x.location.city} ${x.location.state} ${x.location.country} ${x.location.postcode}`,
-        };
+
+    const newUsers = []
+    for (const x of resp.data.results) {
+      newUsers.push({
+        name: x.name.first + " " + x.name.last,
+        email: x.email,
+        imgUrl: x.picture.large,
+        address: `${x.location.city} ${x.location.state} ${x.location.country} ${x.location.postcode}`,
       })
-    );
+    }
+
+    setUsers(newUsers)
   };
 
   return (
@@ -47,7 +48,9 @@ export default function Home() {
       </div>
 
       {users.map((x) => (
-        <UserCard key={x.name} {...x} />
+        <UserCard key={x.name}
+          {...x}
+        />
       ))}
 
       <p className="text-center mt-3 text-muted fst-italic">
